@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Aether PulsFeel Every Beate —  | boAt</title>
+<meta name="description" content="Aether Pulse. Immersive sound, powerful bass, premium comfort. The most advanced headphone boAt has ever built." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
+
+<style>
+  :root{
+    --bg:#050505;
+    --bg-soft:#0a0a0b;
+    --card:rgba(255,255,255,0.05);
+    --card-hover:rgba(255,255,255,0.08);
+    --accent:#ff3300;
+    --accent-2:#00E5FF;
+    --text:#ffffff;
+    --text-2:#B8B8B8;
+    --border:rgba(255,255,255,0.08);
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:var(--bg);}
+  html,body{height:100%;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    cursor:none;
+  }
+  ::selection{background:var(--accent);color:#000;}
+
+  h1,h2,h3,h4,.display{
+    font-family:'Poppins',sans-serif;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    line-height:1.02;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer;}
+
+  .container{
+    width:min(1240px, 92vw);
+    margin:0 auto;
+  }
+
+  @media(prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ---------- custom cursor ---------- */
+  .cursor{
+    position:fixed;
+    top:0;left:0;
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--accent);
+    pointer-events:none;
+    z-index:9999;
+    mix-blend-mode:difference;
+    transform:translate(-50%,-50%);
+    transition:width .25s var(--ease), height .25s var(--ease), background .25s var(--ease);
+  }
+  .cursor-ring{
+    position:fixed;
+    top:0;left:0;
+    width:36px;height:36px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.35);
+    pointer-events:none;
+    z-index:9998;
+    transform:translate(-50%,-50%);
+    transition:width .3s var(--ease), height .3s var(--ease), border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .cursor-ring.grow{width:70px;height:70px;background:rgba(255,61,0,0.08);border-color:var(--accent);}
+  @media(max-width:900px){.cursor,.cursor-ring{display:none;} body{cursor:auto;}}
+
+  /* ---------- loading screen ---------- */
+  #loader{
+    position:fixed;inset:0;
+    background:#050505;
+    z-index:10000;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;
+    gap:22px;
+  }
+  .loader-mark{
+    font-family:'Poppins',sans-serif;
+    font-size:14px;
+    letter-spacing:0.4em;
+    text-transform:uppercase;
+    color:var(--text-2);
+  }
+  .loader-bar{
+    width:220px;height:1px;
+    background:rgba(255,255,255,0.1);
+    position:relative;
+    overflow:hidden;
+  }
+  .loader-bar::after{
+    content:'';
+    position:absolute;left:0;top:0;bottom:0;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    animation:loadfill 1.6s var(--ease) forwards;
+  }
+  @keyframes loadfill{to{width:100%;}}
+
+  /* ---------- scroll progress ---------- */
+  #progress{
+    position:fixed;top:0;left:0;
+    height:2px;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    z-index:600;
+    transform-origin:left;
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;
+    z-index:500;
+    padding:22px 0;
+    transition:padding .4s var(--ease), background .4s var(--ease), border-color .4s var(--ease);
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    padding:14px 0;
+    background:rgba(5,5,5,0.7);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{
+    font-family:'Poppins',sans-serif;
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:0.02em;
+  }
+  .logo span{color:var(--accent);}
+  .nav-links{
+    display:flex;gap:38px;
+    list-style:none;
+  }
+  .nav-links a{
+    font-size:13px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--text-2);
+    position:relative;
+    padding-bottom:4px;
+  }
+  .nav-links a::after{
+    content:'';
+    position:absolute;left:0;bottom:0;
+    width:0%;height:1px;
+    background:var(--accent);
+    transition:width .35s var(--ease);
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    display:flex;align-items:center;gap:24px;
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:13px 26px;
+    border-radius:100px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    position:relative;
+    overflow:hidden;
+    isolation:isolate;
+  }
+  .btn-primary{
+    background:var(--accent);
+    color:#fff;
+  }
+  .btn-primary::before{
+    content:'';
+    position:absolute;inset:0;
+    background:radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.35), transparent 60%);
+    opacity:0;
+    transition:opacity .3s;
+    z-index:-1;
+  }
+  .btn-primary:hover::before{opacity:1;}
+  .btn-primary:hover{box-shadow:0 0 40px rgba(255, 0, 119, 0.5);}
+  .btn-ghost{
+    border:1px solid var(--border);
+    color:var(--text);
+    background:rgba(255,255,255,0.02);
+  }
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.3); background:rgba(255,255,255,0.06);}
+  .menu-toggle{display:none;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    height:100svh;
+    min-height:640px;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    background:#000;
+  }
+  .hero-video-wrap{
+    position:absolute;inset:0;
+    z-index:0;
+  }
+  .hero-video-wrap video{
+    width:100%;height:100%;
+    object-fit:cover;
+    object-position:center;
+    filter:brightness(0.72) saturate(1.05);
+  }
+  .hero-overlay{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(180deg, rgba(5,5,5,0.55) 0%, rgba(5,5,5,0.15) 30%, rgba(5,5,5,0.35) 65%, rgba(5,5,5,0.96) 100%),
+      radial-gradient(ellipse at 50% 20%, rgba(255,61,0,0.12), transparent 55%);
+    z-index:1;
+  }
+  .hero-grain{
+    position:absolute;inset:0;
+    z-index:2;
+    opacity:0.035;
+    pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .hero-content{
+    position:relative;z-index:3;
+    width:100%;
+    padding-bottom:8.5vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .hero-eyebrow{
+    display:flex;align-items:center;gap:10px;
+    font-size:12px;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    color:var(--text-2);
+    margin-bottom:22px;
+    overflow:hidden;
+  }
+  .hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
+  .hero h1{
+    font-size:clamp(48px, 9vw, 128px);
+    text-transform:uppercase;
+    max-width:1100px;
+  }
+  .hero h1 .line{overflow:hidden;display:block;}
+  .hero h1 .line span{display:inline-block; will-change:transform;}
+  .hero h1 .accent-word{
+    background:linear-gradient(90deg,var(--accent),#ff8a00);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero-sub{
+    margin-top:26px;
+    font-size:clamp(15px,1.6vw,19px);
+    color:var(--text-2);
+    max-width:420px;
+    line-height:1.6;
+    font-weight:300;
+  }
+  .hero-actions{
+    margin-top:42px;
+    display:flex;gap:18px;
+    flex-wrap:wrap;
+  }
+  .scroll-indicator{
+    position:absolute;
+    right:min(6vw,60px);
+    bottom:60px;
+    z-index:3;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+  }
+  .scroll-indicator .track{
+    width:1px;height:64px;
+    background:rgba(255,255,255,0.2);
+    position:relative;
+    overflow:hidden;
+  }
+  .scroll-indicator .track::after{
+    content:'';
+    position:absolute;top:-100%;left:0;
+    width:100%;height:100%;
+    background:linear-gradient(180deg,transparent,var(--accent-2));
+    animation:scrolldrip 1.8s ease-in-out infinite;
+  }
+  @keyframes scrolldrip{
+    0%{top:-100%;} 60%{top:100%;} 100%{top:100%;}
+  }
+  .scroll-indicator span{
+    writing-mode:vertical-rl;
+    font-size:11px;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--text-2);
+  }
+
+  /* ---------- section shared ---------- */
+  section{
+    position:relative;
+    padding:150px 0;
+  }
+  .section-tag{
+    font-size:12px;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+    margin-bottom:18px;
+    display:inline-block;
+  }
+  .section-head{
+    max-width:640px;
+    margin-bottom:80px;
+  }
+  .section-head h2{
+    font-size:clamp(32px,5vw,58px);
+    margin-bottom:20px;
+  }
+  .section-head p{
+    color:var(--text-2);
+    font-size:17px;
+    font-weight:300;
+    line-height:1.7;
+  }
+  .reveal{opacity:0; transform:translateY(40px);}
+
+  /* ---------- showcase (floating headphone) ---------- */
+  .showcase{
+    padding-top:60px;
+    text-align:center;
+  }
+  .showcase-stage{
+    position:relative;
+    height:70vh;
+    min-height:480px;
+    display:flex;align-items:center;justify-content:center;
+    margin-top:40px;
+  }
+  .showcase-glow{
+    position:absolute;
+    width:60%;height:60%;
+    background:radial-gradient(circle, rgba(255,61,0,0.25), rgba(0,229,255,0.08) 45%, transparent 70%);
+    filter:blur(60px);
+    z-index:0;
+    border-radius:50%;
+  }
+  .showcase-ring{
+    position:absolute;
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:50%;
+  }
+  .showcase-ring.r1{width:340px;height:340px;}
+  .showcase-ring.r2{width:480px;height:480px;border-color:rgba(255,255,255,0.04);}
+  .showcase-product{
+    position:relative;z-index:2;
+    width:min(60%, 420px);
+    filter:drop-shadow(0 40px 60px rgba(0,0,0,0.7));
+    will-change:transform;
+  }
+  .showcase-caption{
+    margin-top:20px;
+    color:var(--text-2);
+    font-size:13px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+  }
+
+  /* ---------- features ---------- */
+  .features-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+    border-radius:24px;
+    overflow:hidden;
+  }
+  .feature-card{
+    background:var(--bg-soft);
+    padding:44px 30px;
+    transition:background .4s var(--ease), transform .4s var(--ease);
+    position:relative;
+  }
+  .feature-card:hover{
+    background:var(--card-hover);
+    transform:translateY(-6px);
+    z-index:2;
+  }
+  .feature-icon{
+    width:42px;height:42px;
+    margin-bottom:26px;
+    color:var(--accent-2);
+  }
+  .feature-icon svg{width:100%;height:100%;}
+  .feature-card h4{
+    font-size:16px;
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .feature-card p{
+    font-size:13.5px;
+    color:var(--text-2);
+    line-height:1.6;
+    font-weight:300;
+  }
+  @media(max-width:980px){.features-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.features-grid{grid-template-columns:1fr;}}
+
+  /* ---------- highlights (split) ---------- */
+  .highlight{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:80px;
+    align-items:center;
+    margin-bottom:180px;
+  }
+  .highlight:last-child{margin-bottom:0;}
+  .highlight.reverse{direction:rtl;}
+  .highlight.reverse > *{direction:ltr;}
+  .highlight-media{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:28px;
+    overflow:hidden;
+    background:radial-gradient(circle at 30% 30%, rgba(0,229,255,0.12), transparent 60%), var(--card);
+    border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .highlight-media img{width:70%;filter:drop-shadow(0 30px 40px rgba(0,0,0,0.6));}
+  .highlight-num{
+    font-family:'Poppins',sans-serif;
+    font-size:13px;
+    color:var(--accent);
+    letter-spacing:0.2em;
+    margin-bottom:20px;
+  }
+  .highlight h3{
+    font-size:clamp(28px,3.6vw,44px);
+    margin-bottom:22px;
+  }
+  .highlight p{
+    color:var(--text-2);
+    font-size:16px;
+    line-height:1.8;
+    font-weight:300;
+    max-width:440px;
+  }
+  @media(max-width:860px){
+    .highlight, .highlight.reverse{grid-template-columns:1fr; direction:ltr;}
+  }
+
+  /* ---------- sound experience ---------- */
+  .sound{
+    background:radial-gradient(ellipse at 50% 50%, rgba(255,61,0,0.08), transparent 60%), var(--bg);
+    text-align:center;
+  }
+  .eq-wrap{
+    display:flex;align-items:flex-end;justify-content:center;
+    gap:6px;
+    height:160px;
+    margin:60px 0 30px;
+  }
+  .eq-bar{
+    width:8px;
+    border-radius:4px;
+    background:linear-gradient(180deg,var(--accent-2),var(--accent));
+    transform-origin:bottom;
+  }
+  .sound-stats{
+    display:flex;justify-content:center;gap:80px;
+    margin-top:60px;
+    flex-wrap:wrap;
+  }
+  .sound-stat .num{
+    font-family:'Poppins',sans-serif;
+    font-size:48px;
+    font-weight:700;
+    background:linear-gradient(90deg,#fff,var(--text-2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sound-stat .label{
+    font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-2);margin-top:8px;
+  }
+
+  /* ---------- why choose ---------- */
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  .why-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:40px 34px;
+    transition:transform .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+  }
+  .why-card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(0,229,255,0.35);
+    background:var(--card-hover);
+  }
+  .why-icon{
+    width:46px;height:46px;
+    border-radius:14px;
+    background:rgba(255,61,0,0.1);
+    color:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:24px;
+  }
+  .why-icon svg{width:22px;height:22px;}
+  .why-card h4{font-size:19px;margin-bottom:12px;}
+  .why-card p{color:var(--text-2);font-size:14.5px;line-height:1.7;font-weight:300;}
+  @media(max-width:860px){.why-grid{grid-template-columns:1fr;}}
+
+  /* ---------- gallery ---------- */
+  .gallery-wrap{overflow:hidden;}
+  .gallery-track{
+    display:flex;gap:24px;
+    width:max-content;
+  }
+  .gallery-item{
+    width:38vw;max-width:520px;min-width:280px;
+    aspect-ratio:4/5;
+    border-radius:22px;
+    overflow:hidden;
+    position:relative;
+    background:var(--card);
+    border:1px solid var(--border);
+  }
+  .gallery-item img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .6s var(--ease);
+  }
+  .gallery-item:hover img{transform:scale(1.08);}
+  .gallery-item .tag{
+    position:absolute;bottom:20px;left:20px;
+    font-size:12px;letter-spacing:0.15em;text-transform:uppercase;
+    background:rgba(5,5,5,0.6);
+    backdrop-filter:blur(10px);
+    padding:8px 16px;border-radius:100px;
+    border:1px solid var(--border);
+  }
+
+  /* ---------- reviews ---------- */
+  .reviews-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .review-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:34px;
+  }
+  .stars{color:var(--accent-2);letter-spacing:3px;margin-bottom:20px;font-size:14px;}
+  .review-card p{color:var(--text-2);font-size:14.5px;line-height:1.75;font-weight:300;margin-bottom:26px;}
+  .review-author{display:flex;align-items:center;gap:12px;}
+  .review-avatar{
+    width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;
+  }
+  .review-author .name{font-size:13.5px;font-weight:600;}
+  .review-author .role{font-size:11.5px;color:var(--text-2);}
+  @media(max-width:860px){.reviews-grid{grid-template-columns:1fr;}}
+
+  /* ---------- pricing ---------- */
+  .pricing-card{
+    max-width:680px;margin:0 auto;
+    background:linear-gradient(160deg, rgba(255,61,0,0.08), rgba(0,229,255,0.05)), var(--card);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:32px;
+    padding:60px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .pricing-card::before{
+    content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+    background:radial-gradient(circle, rgba(255,61,0,0.08), transparent 60%);
+    animation:spin 20s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .pricing-card > *{position:relative;z-index:1;}
+  .price-badge{
+    display:inline-block;
+    font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+    background:rgba(255,61,0,0.15);color:var(--accent);
+    padding:7px 16px;border-radius:100px;margin-bottom:26px;
+  }
+  .price-amount{
+    font-family:'Poppins',sans-serif;
+    font-size:64px;font-weight:800;
+    margin-bottom:6px;
+  }
+  .price-amount span{font-size:22px;color:var(--text-2);text-decoration:line-through;font-weight:400;margin-left:14px;}
+  .price-emi{color:var(--text-2);font-size:14px;margin-bottom:36px;font-weight:300;}
+  .price-features{
+    display:flex;justify-content:center;gap:30px;flex-wrap:wrap;
+    margin-bottom:40px;
+    color:var(--text-2);font-size:13.5px;
+  }
+  .price-features li{list-style:none;display:flex;align-items:center;gap:8px;}
+  .price-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+
+  /* ---------- faq ---------- */
+  .faq-list{max-width:760px;margin:0 auto;}
+  .faq-item{
+    border-bottom:1px solid var(--border);
+  }
+  .faq-q{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 4px;
+    cursor:pointer;
+    font-size:17px;
+    font-weight:500;
+  }
+  .faq-q .plus{
+    width:20px;height:20px;position:relative;flex-shrink:0;margin-left:20px;
+  }
+  .faq-q .plus::before,.faq-q .plus::after{
+    content:'';position:absolute;background:var(--text-2);transition:transform .35s var(--ease);
+  }
+  .faq-q .plus::before{width:100%;height:1px;top:50%;left:0;}
+  .faq-q .plus::after{width:1px;height:100%;left:50%;top:0;}
+  .faq-item.open .plus::after{transform:rotate(90deg);}
+  .faq-item.open .plus::before,.faq-item.open .plus::after{background:var(--accent);}
+  .faq-a{
+    max-height:0;overflow:hidden;
+    transition:max-height .5s var(--ease);
+  }
+  .faq-a p{color:var(--text-2);padding:0 4px 28px;font-size:14.5px;line-height:1.75;font-weight:300;max-width:640px;}
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:100px 0 40px;
+    border-top:1px solid var(--border);
+    background:var(--bg-soft);
+  }
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1.3fr;
+    gap:50px;
+    margin-bottom:80px;
+  }
+  .footer-brand p{color:var(--text-2);font-size:14px;line-height:1.7;margin:18px 0 26px;font-weight:300;max-width:280px;}
+  .social-row{display:flex;gap:12px;}
+  .social-row a{
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .3s, background .3s;
+  }
+  .social-row a:hover{border-color:var(--accent);background:rgba(255,61,0,0.1);}
+  .social-row svg{width:16px;height:16px;}
+  .footer-col h5{font-size:13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-2);margin-bottom:22px;}
+  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:14px;}
+  .footer-col a{font-size:14px;color:var(--text-2);transition:color .25s;}
+  .footer-col a:hover{color:var(--text);}
+  .newsletter-form{display:flex;gap:0;border-bottom:1px solid var(--border);padding-bottom:12px;margin-top:20px;}
+  .newsletter-form input{
+    flex:1;background:none;border:none;color:var(--text);font-size:14px;font-family:inherit;outline:none;
+  }
+  .newsletter-form input::placeholder{color:var(--text-2);}
+  .newsletter-form button{color:var(--accent);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:32px;border-top:1px solid var(--border);
+    font-size:12.5px;color:var(--text-2);
+    flex-wrap:wrap;gap:16px;
+  }
+  @media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.footer-top{grid-template-columns:1fr;}}
+
+  /* ---------- mobile nav ---------- */
+  @media(max-width:900px){
+    .nav-links{
+      position:fixed;top:0;right:-100%;
+      width:78vw;max-width:340px;height:100svh;
+      background:#0a0a0b;
+      flex-direction:column;
+      align-items:flex-start;
+      padding:110px 34px;
+      gap:26px;
+      transition:right .5s var(--ease);
+      border-left:1px solid var(--border);
+      z-index:400;
+    }
+    .nav-links.open{right:0;}
+    .nav-links a{font-size:16px;}
+    .nav-cta .btn-ghost{display:none;}
+    .menu-toggle{
+      display:flex;flex-direction:column;gap:5px;
+      width:26px;z-index:410;
+      position:relative;
+    }
+    .menu-toggle span{width:100%;height:1px;background:#fff;transition:transform .3s, opacity .3s;}
+    .menu-toggle.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .menu-toggle.open span:nth-child(2){opacity:0;}
+    .menu-toggle.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+    .nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity .4s;z-index:350;}
+    .nav-overlay.open{opacity:1;pointer-events:auto;}
+  }
+
+  @media(max-width:640px){
+    section{padding:100px 0;}
+    .sound-stats{gap:40px;}
+    .price-features{gap:16px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-mark">Aether&nbsp;Pulse</div>
+  <div class="loader-bar"></div>
+</div>
+
+<div id="progress"></div>
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+<!-- ================= NAV ================= -->
+<header id="siteHeader">
+  <div class="container">
+    <nav>
+      <a href="#" class="logo">bo<span>A</span>t</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#highlights">Highlights</a></li>
+        <li><a href="#sound">Sound</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#pricing" class="btn btn-ghost" style="display:none" id="navBuyDesktop">Buy Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline preload="auto" id="heroVideo">
+      <source src="Headphones_explode_into_parts_202607021331.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content container">
+    <h1>
+      <span class="line"><span>Feel Every</span></span>
+      <span class="line" style="display:block;"><span class="accent-word">Beat</span></span>
+    </h1>
+    <p class="hero-sub">Immersive sound, powerful bass, premium comfort.</p>
+    <div class="hero-actions" style="display:flex;justify-content:center;gap:25px;flex-wrap:wrap;">
+      <a href="#pricing" class="btn btn-primary" id="magnetBuy">Buy Now</a>
+      <a href="#features" class="btn btn-ghost" id="magnetExplore">Explore Features</a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="track"></div>
+  </div>
+</section>
+
+<!-- ================= SHOWCASE ================= -->
+<section class="showcase container">
+  <div class="section-tag reveal">The Design</div>
+  <h2 class="reveal" style="font-size:clamp(28px,4.4vw,50px); max-width:700px; margin:0 auto;">A silhouette built around your ear, not the other way around.</h2>
+  <div class="showcase-stage" id="showcaseStage">
+    <div class="showcase-glow"></div>
+    <div class="showcase-ring r1"></div>
+    <div class="showcase-ring r2"></div>
+    <svg class="showcase-product" id="showcaseProduct" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M120 170C120 120 155 80 200 80C245 80 280 120 280 170" stroke="url(#g1)" stroke-width="14" stroke-linecap="round"/>
+      <rect x="90" y="160" width="55" height="100" rx="27" fill="url(#g2)"/>
+      <rect x="255" y="160" width="55" height="100" rx="27" fill="url(#g2)"/>
+      <circle cx="117" cy="210" r="14" fill="#FF3D00" opacity="0.85"/>
+      <circle cx="283" cy="210" r="14" fill="#00E5FF" opacity="0.85"/>
+      <defs>
+        <linearGradient id="g1" x1="120" y1="80" x2="280" y2="170" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#3a3a3a"/><stop offset="1" stop-color="#161616"/>
+        </linearGradient>
+        <linearGradient id="g2" x1="90" y1="160" x2="145" y2="260" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#2c2c2c"/><stop offset="1" stop-color="#0c0c0c"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="showcase-caption reveal">Aether Pulse — Midnight Carbon</div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section id="features" class="container">
+  <div class="section-head">
+    <span class="section-tag">Engineered In</span>
+    <h2 class="reveal">Every detail, tuned on purpose.</h2>
+    <p class="reveal">Eight systems working together so the only thing you notice is the music.</p>
+  </div>
+  <div class="features-grid" id="featuresGrid">
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12a8 8 0 0116 0M4 12v5a2 2 0 002 2h1v-7H4zm16 0v5a2 2 0 01-2 2h-1v-7h3z"/></svg></div>
+      <h4>Active Noise Cancellation</h4>
+      <p>Adaptive ANC listens to your surroundings 500 times a second and cancels what doesn't belong.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="8" width="18" height="8" rx="2"/><path d="M22 10v4"/></svg></div>
+      <h4>40 Hour Battery</h4>
+      <p>A full week of commutes on a single charge, with the case tucked into your bag.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 6.5l11 11L12 22V2l5.5 5.5-11 11"/></svg></div>
+      <h4>Bluetooth 5.4</h4>
+      <p>A locked-in connection with lower latency, longer range, and instant reconnects.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+      <h4>Fast Charging</h4>
+      <p>Ten minutes on the case buys you five hours of playtime when you're in a rush.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 12c0-3 1.5-5 4-5"/></svg></div>
+      <h4>Deep Bass</h4>
+      <p>14mm drivers tuned for low end that you feel in your chest, not just your ears.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3c-3 3-5 6-5 9a5 5 0 0010 0c0-3-2-6-5-9z"/></svg></div>
+      <h4>Water Resistant</h4>
+      <p>IPX5-rated against rain, sweat, and everything a real workout throws at it.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg></div>
+      <h4>Touch Controls</h4>
+      <p>Tap, hold, or swipe on the earcup to skip, answer, or summon your assistant.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4"/></svg></div>
+      <h4>Voice Assistant</h4>
+      <p>Built-in access to your assistant of choice, hands never leaving your pocket.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HIGHLIGHTS ================= -->
+<section id="highlights" class="container">
+  <div class="section-head">
+    <span class="section-tag">Highlights</span>
+    <h2 class="reveal">Built for the long listen.</h2>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-media reveal">
+      <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=800&auto=format&fit=crop" alt="Aether Pulse headphone close up on ear cushion" loading="lazy">
+    </div>
+    <div class="reveal">
+      <div class="highlight-num">01 — Comfort</div>
+      <h3>Memory foam that forgets you're wearing it.</h3>
+      <p>Protein leather ear cushions and a titanium-core headband distribute weight evenly, so hour six feels like hour one.</p>
+    </div>
+  </div>
+
+  <div class="highlight reverse">
+    <div class="highlight-media reveal">
+      <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800&auto=format&fit=crop" alt="Aether Pulse headphone driver detail" loading="lazy">
+    </div>
+    <div class="reveal">
+      <div class="highlight-num">02 — Sound</div>
+      <h3>Custom 40mm drivers, hand-tuned by ear.</h3>
+      <p>A dedicated bass chamber and titanium-coated diaphragm deliver clarity at every volume, from a whisper to a wall of sound.</p>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <div class="highlight-media reveal">
+      <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=800&auto=format&fit=crop" alt="Aether Pulse headphone folded on a table" loading="lazy">
+    </div>
+    <div class="reveal">
+      <div class="highlight-num">03 — Build</div>
+      <h3>Aerospace-grade aluminium, everyday tough.</h3>
+      <p>A reinforced hinge is rated for over 50,000 folds, built to survive the bottom of your bag as easily as your desk.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOUND ================= -->
+<section id="sound" class="sound container">
+  <span class="section-tag">The Sound Experience</span>
+  <h2 class="reveal" style="max-width:640px;margin:0 auto;">Bass you feel before you hear.</h2>
+  <div class="eq-wrap" id="eqWrap"></div>
+  <p style="color:var(--text-2); font-size:15px; max-width:480px; margin:0 auto; font-weight:300;">A dedicated bass amplifier and dual-chamber acoustics push low end further without losing the detail up top.</p>
+  <div class="sound-stats">
+    <div class="sound-stat reveal"><div class="num">40mm</div><div class="label">Driver Size</div></div>
+    <div class="sound-stat reveal"><div class="num">20Hz</div><div class="label">Low Frequency</div></div>
+    <div class="sound-stat reveal"><div class="num">40h</div><div class="label">Playtime</div></div>
+    <div class="sound-stat reveal"><div class="num">-40dB</div><div class="label">ANC Depth</div></div>
+  </div>
+</section>
+
+<!-- ================= WHY CHOOSE ================= -->
+<section class="container">
+  <div class="section-head">
+    <span class="section-tag">Why boAt</span>
+    <h2 class="reveal">Trusted by millions, tuned for one.</h2>
+    <p class="reveal">A decade of audio engineering, distilled into a headphone that adapts to how you actually live.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4.5L6 21l1.5-7.5L2 9h7z"/></svg></div>
+      <h4>Award-Winning Design</h4>
+      <p>Recognized across three continents for a form that's as considered as its function.</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div>
+      <h4>2 Year Warranty</h4>
+      <p>Full coverage on parts and workmanship, backed by a support team that actually answers.</p>
+    </div>
+    <div class="why-card reveal">
+      <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+      <h4>Lab-Tested Reliability</h4>
+      <p>Every unit survives 50,000 drop, fold, and water cycles before it reaches your door.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section id="gallery">
+  <div class="container section-head" style="margin-bottom:50px;">
+    <span class="section-tag">Gallery</span>
+    <h2 class="reveal">Every angle, considered.</h2>
+  </div>
+  <div class="gallery-wrap">
+    <div class="gallery-track" id="galleryTrack">
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="Headphone front angle"><span class="tag">Front</span></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="Headphone side angle"><span class="tag">Profile</span></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="Headphone worn on model"><span class="tag">Worn</span></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="Headphone ear cushion detail"><span class="tag">Detail</span></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="Headphone folded in case"><span class="tag">Carry</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REVIEWS ================= -->
+<section id="reviews" class="container">
+  <div class="section-head">
+    <span class="section-tag">Reviews</span>
+    <h2 class="reveal">What early listeners are saying.</h2>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>The bass hits without drowning out vocals, and after four hours I completely forget I'm wearing them.</p>
+      <div class="review-author"><div class="review-avatar">R</div><div><div class="name">Riya Sharma</div><div class="role">Verified Buyer</div></div></div>
+    </div>
+    <div class="review-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>Battery life is exactly as advertised. I charge it once a week and it just keeps going.</p>
+      <div class="review-author"><div class="review-avatar">A</div><div><div class="name">Arjun Mehta</div><div class="role">Verified Buyer</div></div></div>
+    </div>
+    <div class="review-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>The noise cancellation makes my commute feel like a different city. Worth every rupee.</p>
+      <div class="review-author"><div class="review-avatar">S</div><div><div class="name">Sanya Kapoor</div><div class="role">Verified Buyer</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section id="pricing" class="container">
+  <div class="pricing-card reveal">
+    <span class="price-badge">Launch Offer</span>
+    <h3 style="font-size:26px;margin-bottom:6px;">Aether Pulse</h3>
+    <p style="color:var(--text-2); font-size:14px; margin-bottom:30px; font-weight:300;">Midnight Carbon · Over-ear · ANC</p>
+    <div class="price-amount">₹6,999 <span>₹11,999</span></div>
+    <div class="price-emi">or ₹1,167/month · No cost EMI available</div>
+    <ul class="price-features">
+      <li>✓ Free Shipping</li>
+      <li>✓ 2 Year Warranty</li>
+      <li>✓ 15 Day Returns</li>
+    </ul>
+    <div class="price-actions">
+      <a href="#" class="btn btn-primary">Buy Now</a>
+      <a href="#" class="btn btn-ghost">Add to Cart</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq" class="container">
+  <div class="section-head">
+    <span class="section-tag">FAQ</span>
+    <h2 class="reveal">Good to know.</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q"><span>How long does the battery actually last?</span><span class="plus"></span></div>
+      <div class="faq-a"><p>Up to 40 hours with ANC off, and around 28 hours with ANC on, depending on volume level.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>Is it compatible with both Android and iOS?</span><span class="plus"></span></div>
+      <div class="faq-a"><p>Yes. Aether Pulse pairs over standard Bluetooth 5.4 and supports the companion app on both platforms.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>Can I use it wired if the battery runs out?</span><span class="plus"></span></div>
+      <div class="faq-a"><p>Yes, a 3.5mm cable is included in the box for wired listening at any time, charged or not.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>What does the 2 year warranty cover?</span><span class="plus"></span></div>
+      <div class="faq-a"><p>It covers manufacturing defects in materials and workmanship, including the battery and drivers.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>Is EMI available at checkout?</span><span class="plus"></span></div>
+      <div class="faq-a"><p>Yes, no-cost EMI is available from 3 to 6 months with all major banks at checkout.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">bo<span>A</span>t</a>
+        <p>Designing audio gear for how people actually move, work, and listen — since day one.</p>
+        <div class="social-row">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M10 9l5 3-5 3z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Shop</h5>
+        <ul>
+          <li><a href="#pricing">Aether Pulse</a></li>
+          <li><a href="#">Accessories</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Stay Updated</h5>
+        <p style="color:var(--text-2); font-size:13.5px; font-weight:300;">Get news on new drops and exclusive offers.</p>
+        <div class="newsletter-form">
+          <input type="email" placeholder="Enter your email" aria-label="Email address">
+          <button type="button">Join</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 boAt Lifestyle. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Service · Shipping Policy</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ---------- loader ---------- */
+  const loader = document.getElementById('loader');
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      gsap.to(loader, {opacity:0, duration:0.6, ease:'power2.out', onComplete:()=>loader.style.display='none'});
+      playHeroIntro();
+    }, 1500);
+  });
+
+  /* ---------- lenis smooth scroll ---------- */
+  let lenis;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!prefersReduced && window.Lenis){
+    lenis = new Lenis({ lerp:0.1, smoothWheel:true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- custom cursor ---------- */
+  const cursor = document.querySelector('.cursor');
+  const ring = document.querySelector('.cursor-ring');
+  let mx=innerWidth/2,my=innerHeight/2, rx=mx, ry=my;
+  window.addEventListener('mousemove', e=>{
+    mx=e.clientX; my=e.clientY;
+    cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+  });
+  gsap.ticker.add(()=>{
+    rx += (mx-rx)*0.15; ry += (my-ry)*0.15;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  });
+  document.querySelectorAll('a,button,.feature-card,.why-card,.gallery-item').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>ring.classList.add('grow'));
+    el.addEventListener('mouseleave', ()=>ring.classList.remove('grow'));
+  });
+
+  /* ---------- magnetic buttons ---------- */
+  document.querySelectorAll('.btn').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width/2;
+      const y = e.clientY - r.top - r.height/2;
+      gsap.to(btn, {x:x*0.3, y:y*0.4, duration:0.4, ease:'power2.out'});
+      btn.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+      btn.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+    });
+    btn.addEventListener('mouseleave', ()=>gsap.to(btn,{x:0,y:0,duration:0.5,ease:'elastic.out(1,0.4)'}));
+  });
+
+  /* ---------- header on scroll ---------- */
+  const header = document.getElementById('siteHeader');
+  ScrollTrigger.create({
+    start: 100, end: 99999,
+    onUpdate: self => header.classList.toggle('scrolled', self.scroll() > 80)
+  });
+
+  /* ---------- scroll progress ---------- */
+  gsap.to('#progress', {
+    width:'100%', ease:'none',
+    scrollTrigger:{ trigger: document.body, start:'top top', end:'bottom bottom', scrub:0.3 }
+  });
+
+  /* ---------- mobile nav ---------- */
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  const navOverlay = document.getElementById('navOverlay');
+  function closeMenu(){menuToggle.classList.remove('open');navLinks.classList.remove('open');navOverlay.classList.remove('open');}
+  menuToggle.addEventListener('click', ()=>{
+    menuToggle.classList.toggle('open');
+    navLinks.classList.toggle('open');
+    navOverlay.classList.toggle('open');
+  });
+  navOverlay.addEventListener('click', closeMenu);
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+
+  /* ---------- hero intro text reveal ---------- */
+  function playHeroIntro(){
+    gsap.set('.hero h1 .line span', {yPercent:120, rotate:4});
+    const tl = gsap.timeline({defaults:{ease:'power4.out'}});
+    tl.to('.hero-eyebrow', {opacity:1, duration:0.01})
+      .from('.hero-eyebrow', {y:20, opacity:0, duration:0.7})
+      .to('.hero h1 .line span', {yPercent:0, rotate:0, duration:1.1, stagger:0.12}, '-=0.4')
+      .from('.hero-sub', {y:20, opacity:0, duration:0.8}, '-=0.6')
+      .from('.hero-actions', {y:20, opacity:0, duration:0.8}, '-=0.6')
+      .from('.scroll-indicator', {opacity:0, duration:0.8}, '-=0.5');
+  }
+  gsap.set('.hero-eyebrow', {opacity:0});
+
+  /* ---------- generic scroll reveals ---------- */
+  gsap.utils.toArray('.reveal').forEach(el=>{
+    gsap.to(el, {
+      opacity:1, y:0, duration:1, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 88%' }
+    });
+  });
+
+  /* ---------- feature cards stagger ---------- */
+  gsap.utils.toArray('#featuresGrid .feature-card').forEach((card,i)=>{
+    gsap.fromTo(card, {opacity:0, y:50, scale:0.96}, {
+      opacity:1, y:0, scale:1, duration:0.8, ease:'power3.out',
+      delay:(i%4)*0.06,
+      scrollTrigger:{ trigger:card, start:'top 90%' }
+    });
+  });
+
+  /* ---------- showcase parallax / mouse tilt ---------- */
+  const stage = document.getElementById('showcaseStage');
+  const product = document.getElementById('showcaseProduct');
+  if(stage && product){
+    stage.addEventListener('mousemove', e=>{
+      const r = stage.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width - 0.5;
+      const py = (e.clientY - r.top)/r.height - 0.5;
+      gsap.to(product, {rotateY:px*22, rotateX:-py*16, duration:0.6, ease:'power2.out', transformPerspective:800});
+    });
+    stage.addEventListener('mouseleave', ()=>gsap.to(product,{rotateY:0,rotateX:0,duration:0.8,ease:'power3.out'}));
+    gsap.to(product, {
+      y:-24, duration:2.4, ease:'sine.inOut', yoyo:true, repeat:-1
+    });
+    gsap.to('.showcase-ring.r1', {rotate:360, duration:40, repeat:-1, ease:'none'});
+    gsap.to('.showcase-ring.r2', {rotate:-360, duration:60, repeat:-1, ease:'none'});
+    gsap.from('#showcaseStage', {
+      opacity:0, y:60, duration:1.2, ease:'power3.out',
+      scrollTrigger:{trigger:'#showcaseStage', start:'top 80%'}
+    });
+  }
+
+  /* ---------- highlight split sections ---------- */
+  gsap.utils.toArray('.highlight').forEach(h=>{
+    const media = h.querySelector('.highlight-media');
+    const text = h.querySelectorAll('.highlight-num, h3, p');
+    gsap.fromTo(media, {opacity:0, scale:0.9}, {
+      opacity:1, scale:1, duration:1, ease:'power3.out',
+      scrollTrigger:{trigger:h, start:'top 80%'}
+    });
+    gsap.fromTo(text, {opacity:0, y:30}, {
+      opacity:1, y:0, duration:0.9, stagger:0.1, ease:'power3.out',
+      scrollTrigger:{trigger:h, start:'top 75%'}
+    });
+  });
+
+  /* ---------- equalizer bars ---------- */
+  const eqWrap = document.getElementById('eqWrap');
+  const barCount = 40;
+  for(let i=0;i<barCount;i++){
+    const bar = document.createElement('div');
+    bar.className='eq-bar';
+    eqWrap.appendChild(bar);
+  }
+  const bars = document.querySelectorAll('.eq-bar');
+  bars.forEach((bar,i)=>{
+    gsap.to(bar, {
+      height: ()=> 12 + Math.random()*140,
+      duration: ()=> 0.4 + Math.random()*0.6,
+      repeat:-1, yoyo:true, ease:'sine.inOut',
+      delay: i*0.02
+    });
+  });
+  gsap.from('#eqWrap', {opacity:0, duration:1, scrollTrigger:{trigger:'#eqWrap', start:'top 85%'}});
+  gsap.utils.toArray('.sound-stat').forEach((s,i)=>{
+    gsap.fromTo(s, {opacity:0,y:20},{opacity:1,y:0,duration:0.7,delay:i*0.08,ease:'power3.out',
+      scrollTrigger:{trigger:'.sound-stats', start:'top 88%'}});
+  });
+
+  /* ---------- why cards ---------- */
+  gsap.utils.toArray('.why-card').forEach((c,i)=>{
+    gsap.fromTo(c, {opacity:0,y:40},{opacity:1,y:0,duration:0.8,delay:i*0.08,ease:'power3.out',
+      scrollTrigger:{trigger:c, start:'top 88%'}});
+  });
+
+  /* ---------- horizontal gallery scroll ---------- */
+  const track = document.getElementById('galleryTrack');
+  function initGallery(){
+    const scrollLength = track.scrollWidth - window.innerWidth + 100;
+    if(scrollLength <= 0) return;
+    gsap.to(track, {
+      x: -scrollLength, ease:'none',
+      scrollTrigger:{
+        trigger:'.gallery-wrap',
+        start:'top top',
+        end:()=> '+=' + scrollLength,
+        scrub:0.6,
+        pin:true,
+        invalidateOnRefresh:true
+      }
+    });
+  }
+  initGallery();
+
+  /* ---------- review cards ---------- */
+  gsap.utils.toArray('.review-card').forEach((c,i)=>{
+    gsap.fromTo(c, {opacity:0,y:40},{opacity:1,y:0,duration:0.8,delay:i*0.08,ease:'power3.out',
+      scrollTrigger:{trigger:c, start:'top 90%'}});
+  });
+
+  /* ---------- pricing card ---------- */
+  gsap.fromTo('.pricing-card', {opacity:0, y:50, scale:0.95}, {
+    opacity:1, y:0, scale:1, duration:1, ease:'power3.out',
+    scrollTrigger:{trigger:'.pricing-card', start:'top 85%'}
+  });
+
+  /* ---------- faq accordion ---------- */
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', ()=>{
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(o=>{
+        o.classList.remove('open');
+        o.querySelector('.faq-a').style.maxHeight = null;
+      });
+      if(!isOpen){
+        item.classList.add('open');
+        a.style.maxHeight = a.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* ---------- refresh on resize ---------- */
+  let resizeT;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeT);
+    resizeT = setTimeout(()=>ScrollTrigger.refresh(), 300);
+  });
+
+  /* ---------- smooth anchor scroll for nav ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id = a.getAttribute('href');
+      if(id.length>1){
+        const target = document.querySelector(id);
+        if(target){
+          e.preventDefault();
+          if(lenis){ lenis.scrollTo(target, {offset:-40}); }
+          else { target.scrollIntoView({behavior:'smooth'}); }
+        }
+      }
+    });
+  });
+
+});
+</script>
+</body>
+</html>
